@@ -1,0 +1,24 @@
+.rank1 td {
+    background: #DFC25E;
+ }
+
+.rank2 td {
+    background: #E0E0E0;
+ }
+
+.rank3 td {
+    background: #E1B284;
+}
+
+.rank-normal td {
+    background: #FAFAFA;
+}
+
+#audio-button {
+    position: relative;
+    left: -12.5px;
+}
+
+#toggle-clef {
+    visibility: visible;
+}

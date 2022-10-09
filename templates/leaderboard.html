@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Leaderboard
+{% endblock %}
+
+{% block alert %}
+    <h4 class="alert-heading">Leaderboard!</h4>
+    <p class="mb-0">Each scale has its own leaderboard. The top three scores (including ties!) in each leaderboard are all highlighted!</p>
+{% endblock %}
+
+{% block main %}
+    <form action="/leaderboard" method="post">
+        <div class="mb-3">
+            <select class="form-select mx-auto w-auto" name="scale">
+                <option disabled selected>Choose Scale for Leaderboard</option>
+                <option value="C-major">Concert C Major</option>
+                <option value="F-major">Concert F Major</option>
+                <option value="Bb-major">Concert B&#x266d Major</option>
+                <option value="Eb-major">Concert E&#x266d Major</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <input class="btn btn-primary" type="submit" value="Display Leaderboard">
+        </div>
+    </form>
+
+    {% if leaderboard %}
+        <table id="lb" class="table table-hover">
+            <thead>
+                <tr>
+                    <th class="text-start">Rank</th>
+                    <th class="text-start">Name</th>
+                    <th class="text-end">Score</th>
+                    <th class="text-end">Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!--From https://stackoverflow.com/a/49699589-->
+                {% set count = namespace(value=1) %}
+                {% for rank in leaderboard %}
+                    {% if not loop.first and rank["score"] != loop.previtem["score"] %}
+                        {% set count.value = count.value + 1 %}
+                    {% endif %}
+
+                    {% if count.value <= 3 %}
+                        <tr class="rank{{ count.value }}">
+                    {% else %}
+                        <tr class="rank-normal"></tr>
+                    {% endif %}
+                            <td class="text-start">{{ count.value }}</td>
+                            <td class="text-start">{{ rank["name"] }}</td>
+                            <td class="text-end">{{ rank["score"] }}</td>
+                            <td class="text-end">{{ rank["datetime"] }}</td>
+                        </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,76 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block alert %}
+    <h4 class="alert-heading">Hello MS Band!</h4>
+    <p>This is a simple tool to help new band students practice their scales in a fun manner!</p>
+    <p>You can begin by choosing your scale and clef below. You can use the table at the bottom to help convert from your scale to the concert pitch</p>
+    <p>As you start practicing more and more, people with the highest scores will be featured in the leaderboard.</p>
+    <hr>
+    <p>If you find any issues with the website, please let me know at iaggarwal.23@asdubai.org</p>
+    <h6 class="mb-0">~ Ibhan Aggarwal</h6>
+{% endblock %}
+
+{% block main %}
+    <form action="/scales" method="post">
+        <div class="mb-3">
+            <select class="form-select mx-auto w-auto" name="scale">
+                <option disabled selected>Choose Major Scale</option>
+                <option value="C-major">Concert C Major</option>
+                <option value="F-major">Concert F Major</option>
+                <option value="Bb-major">Concert B&#x266d Major</option>
+                <option value="Eb-major">Concert E&#x266d Major</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <select class="form-select mx-auto w-auto" name="clef">
+                <option disabled selected>Choose Clef</option>
+                <option value="treble-clef">Treble</option>
+                <option value="bass-clef">Bass</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <input class="btn btn-primary" type="submit" value="Go to Scale">
+        </div>
+    </form>
+
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>[Concert Pitch] C Instruments: <br>Flute/Percussion/Tuba/Trombone/Baritone</th>
+                <th>B&#x266d Instruments: <br>Clarinet/Trumpet/Tenor Sax</th>
+                <th>E&#x266d Instruments: <br>Alto Sax/Bari Sax</th>
+                <th>F Instruments: <br>French Horn</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>C</td>
+                <td>D</td>
+                <td>A</td>
+                <td>G</td>
+            </tr>
+            <tr>
+                <td>F</td>
+                <td>G</td>
+                <td>D</td>
+                <td>C</td>
+            </tr>
+            <tr>
+                <td>B&#x266d</td>
+                <td>C</td>
+                <td>G</td>
+                <td>F</td>
+            </tr>
+            <tr>
+                <td>E&#x266d</td>
+                <td>F</td>
+                <td>C</td>
+                <td>B&#x266d</td>
+            </tr>
+        </tbody>
+    </table>
+{% endblock %}

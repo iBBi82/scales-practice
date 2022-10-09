@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Scales
+{% endblock %}
+
+{% block alert %}
+    <h4 class="alert-heading">Practice your Scales!</h4>
+    <p class="mb-0">After listening to the scale, you can click the start button and press the eight notes in ascending order.<br>
+        After you play eight notes, it'll show you which ones you got right and wrong and your total score.<br>
+        If you feel more experienced, play the scale without listening to the audio or showing the clef!</p>
+    <hr>
+    <p class="mb-0">Make sure to enter your full name and click "Save Score" so it can go on the leaderboard.</p>
+{% endblock %}
+
+{% block main %}
+    <div>
+        <img id="img-clef" src="static/images/scales/{{ scaleName }}-{{ clef }}.png">
+        <button class="btn btn-warning border border-dark" id="toggle-clef" type="button">Hide Clef</button>
+    </div>
+
+    <div id="audio-button" class="mb-5">
+        <audio id="scale-audio"><source src="static/audio/scales/{{ scaleName }}.mp3" type="audio/mpeg"></audio>
+        <img src="static/images/volume.png" width="25" height="25">
+        <button class="btn btn-warning border border-dark" id="play-scale" type="button">Play Scale Audio</button>
+    </div>
+
+    <div class="mb-3">
+        <button class="btn btn-secondary border border-dark" id="start" type="button" onclick='setScale({{ scale | tojson }})'>Start</button>
+    </div>
+
+    <div class="mb-3">
+        {% for note in octave %}
+            <audio id="{{ note }}-audio"><source src="static/audio/notes/{{ note }}.mp3" type="audio/mpeg"></audio>
+            {% if note[-2] == "b" %}
+                <button disabled id="{{ note }}" class="note btn btn-primary" type="button" onclick="document.querySelector('#{{ note }}-audio').play();addClick(this)">{{ note[:-2] }}&#x266d</button>
+            {% else %}
+                <button disabled id="{{ note }}" class="note btn btn-primary" type="button" onclick="document.querySelector('#{{ note }}-audio').play();addClick(this)">{{ note[:-1] }}</button>
+            {% endif %}
+        {% endfor %}
+        <p class="mb-2" id="showAnswer"></p>
+    </div>
+
+    <div class="btn-group mb-3" role="group">
+        <form action="/save_scores" method="post">
+            <input name="scale" type="hidden" value="{{ scaleName }}">
+            <input name="score" type="hidden" id="score">
+            <input style="margin-right: 10px" class="btn btn-success" type="submit" value="Save Score">
+        </form>
+        <form action="/scales" method="post">
+            <input name="scale" type="hidden" value="{{ scaleName }}">
+            <input name="clef" type="hidden" value="{{ clef }}">
+            <input class="btn btn-warning" type="submit" value="Try Again">
+        </form>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script src="static/scripts/scales.js"></script>
+{% endblock %}
