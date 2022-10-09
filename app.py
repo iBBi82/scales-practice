@@ -18,7 +18,10 @@ app.config["SECRET_KEY"] = "f7237b99bdec421188be92fb042a36e6"
 Session(app)
 
 # Configure database
-db = SQL("sqlite:///music.db")
+uri = os.getenv("DATABASE_URL")
+if uri.startswith("postgres://"):
+    uri = uri.replace("postgres://", "postgresql://")
+db = SQL(uri)
 
 def join_required(f):
     """Decorate routes to require login."""
