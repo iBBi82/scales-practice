@@ -6,17 +6,17 @@
 
 {% block alert %}
     <h4 class="alert-heading">Welcome!</h4>
-    <p class="mb-0">Enter your name below and click Join. You'll only see this is if its your first time visiting the site!</p>
+    <p class="mb-0">Enter your email below and click Join.</p>
 {% endblock %}
 
 {% block main %}
     <form action="/join" method="post">
         <div class="mb-1">
-            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="name" name="name" placeholder="Name" type="text">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="email" name="email" placeholder="example.@asdubai.org" type="text">
         </div>
         <div class="form-text mb-3">
-            Enter your name in one of the following formats: <br>
-            George Washington // George // George W
+            Make sure to enter your complete school email <br>
+            It will not let you join without it.
         </div>
         <button class="btn btn-primary" type="submit">Join</button>
     </form>

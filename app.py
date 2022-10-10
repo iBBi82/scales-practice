@@ -2,7 +2,7 @@ import os
 
 from cs50 import SQL
 from flask import Flask, redirect, render_template, request, flash, session
-from datetime import datetime, timedelta
+from datetime import datetime
 from flask_session import Session
 from functools import wraps
 
@@ -10,8 +10,7 @@ from functools import wraps
 app = Flask(__name__)
 
 # App configuration for sessions and more
-app.config["SESSION_PERMANENT"] = True
-app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(days=365)
+app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.config["SECRET_KEY"] = "f7237b99bdec421188be92fb042a36e6"
@@ -23,8 +22,9 @@ if uri.startswith("postgres://"):
     uri = uri.replace("postgres://", "postgresql://")
 db = SQL(uri)
 
+
 def join_required(f):
-    """Decorate routes to require login."""
+    """Decorate routes to require joining."""
 
     # https://flask.palletsprojects.com/en/1.1.x/patterns/viewdecorators/
     @wraps(f)
@@ -45,6 +45,34 @@ def after_request(response):
     return response
 
 
+@app.route("/join", methods=["GET", "POST"])
+def join():
+    """Allow user to enter the site"""
+
+    # Forget any user id
+    session.clear()
+
+    # User reached via POST (submitting a form)
+    if request.method == "POST":
+        email = request.form.get("email")
+
+        # Ensure email meets requirements
+        if not email or not "asdubai.org" in email:
+            return redirect("/join")
+
+        # Creating user and user_id to be used in all other routes
+        record = db.execute("SELECT * FROM students WHERE email = ?", email)
+        if len(record) == 0:
+            db.execute("INSERT INTO STUDENTS (email) VALUES(?)", email)
+
+        session["user_id"] = db.execute("SELECT id FROM students WHERE email = ?", email)[0]["id"]
+        flash("Successful!")
+        return redirect("/")
+
+    # User reached via GET (link or redirect)
+    return render_template("join.html")
+
+
 @app.route("/")
 @join_required
 def index():
@@ -58,9 +86,11 @@ def index():
 def scales():
     """Load home page for user to choose a scale"""
 
+    # User reached via GET (link or redirect)
     if request.method == "GET":
         return redirect("/")
 
+    # User reached via POST (submitting a form)
     scaleName = request.form.get("scale")
     clef = request.form.get("clef")
 
@@ -94,12 +124,14 @@ def scales():
 def save():
     """Save user's score and add it to leaderboard"""
 
+    # User reached via GET (link or redirect)
     if request.method == "GET":
         return redirect("/")
 
+    # User reached via POST (submitting a form)
     scale = request.form.get("scale")
     score = request.form.get("score")
-    name = db.execute("SELECT name FROM students WHERE id = ?", session["user_id"])[0]["name"]
+    email = db.execute("SELECT email FROM students WHERE id = ?", session["user_id"])[0]["email"]
 
     # Ensure user filled in name and score
     if not score:
@@ -109,11 +141,11 @@ def save():
     dt = datetime.now().strftime("%Y-%m-%d")
 
     # Insert user's score into leaderboard table
-    record = db.execute("SELECT COUNT(1) AS count FROM leaderboard WHERE name = ? AND scale = ?", name, scale)[0]["count"]
+    record = db.execute("SELECT COUNT(1) AS count FROM leaderboard WHERE name = ? AND scale = ?", email[:-15], scale)[0]["count"]
     if record == 0:
-        db.execute("INSERT INTO leaderboard (name, scale, score, datetime) VALUES(?, ?, ?, ?)", name, scale, score, dt)
+        db.execute("INSERT INTO leaderboard (name, scale, score, datetime) VALUES(?, ?, ?, ?)", email[:-15], scale, score, dt)
     else:
-        db.execute("UPDATE leaderboard SET score = ? WHERE name = ? AND scale = ?", score, name, scale)
+        db.execute("UPDATE leaderboard SET score = ? WHERE name = ? AND scale = ?", score, email[:-15], scale)
 
     # Take user to home page
     flash("Your score has been saved. Check to see if it's on the leaderboard!")
@@ -140,29 +172,3 @@ def leaderboard():
 
     # User reached via GET (link or redirect)
     return render_template("leaderboard.html", leaderboard=None)
-
-
-@app.route("/join", methods=["GET", "POST"])
-def join():
-
-    # User reached via POST (submitting a form)
-    if request.method == "POST":
-        name = request.form.get("name")
-
-        # Ensuring name meets requirements
-        if not name:
-            flash("Please enter your name!")
-            return redirect("/join")
-        for c in name:
-            if c.isnumeric():
-                flash("Only letters please!")
-                return redirect("/join")
-
-        # Creating user and user_id to be used in all other routes
-        db.execute("INSERT INTO students (name) VALUES(?)", name)
-        session["user_id"] = db.execute("SELECT id FROM students WHERE name = ?", name)[0]["id"]
-        flash("Successful!")
-        return redirect("/")
-
-    # User reached via GET (link or redirect)
-    return render_template("join.html")
