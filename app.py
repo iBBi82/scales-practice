@@ -57,7 +57,7 @@ def join():
         email = request.form.get("email")
 
         # Ensure email meets requirements
-        if not email or not "asdubai.org" in email:
+        if not email or not (email[-12:] == "@asdubai.org"):
             return redirect("/join")
 
         # Creating user and user_id to be used in all other routes
@@ -131,6 +131,8 @@ def save():
     # User reached via POST (submitting a form)
     scale = request.form.get("scale")
     score = request.form.get("score")
+    showingClef = request.form.get("showingClef")
+    playedAudio = request.form.get("playedAudio")
     email = db.execute("SELECT email FROM students WHERE id = ?", session["user_id"])[0]["email"]
 
     # Ensure user filled in name and score
@@ -138,14 +140,21 @@ def save():
         flash("Please attempt the scale before saving!")
         return redirect("/")
 
-    dt = datetime.now().strftime("%Y-%m-%d")
+    # Give user score bonus as appropriate
+    score = float(score)
+    if (showingClef == "false" and playedAudio == "false"):
+        score *= 1.50
+    elif (showingClef == "false" or playedAudio == "false"):
+        score *= 1.25
+
+    dt = datetime.now().strftime("%m/%d/%Y")
 
     # Insert user's score into leaderboard table
-    record = db.execute("SELECT COUNT(1) AS count FROM leaderboard WHERE name = ? AND scale = ?", email[:-15], scale)[0]["count"]
+    record = db.execute("SELECT COUNT(1) AS count FROM leaderboard WHERE name = ? AND scale = ?", email[:-12], scale)[0]["count"]
     if record == 0:
-        db.execute("INSERT INTO leaderboard (name, scale, score, datetime) VALUES(?, ?, ?, ?)", email[:-15], scale, score, dt)
+        db.execute("INSERT INTO leaderboard (name, scale, score, datetime) VALUES(?, ?, ?, ?)", email[:-12], scale, score, dt)
     else:
-        db.execute("UPDATE leaderboard SET score = ? WHERE name = ? AND scale = ?", score, email[:-15], scale)
+        db.execute("UPDATE leaderboard SET score = ? WHERE name = ? AND scale = ?", score, email[:-12], scale)
 
     # Take user to home page
     flash("Your score has been saved. Check to see if it's on the leaderboard!")

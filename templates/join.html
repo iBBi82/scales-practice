@@ -6,17 +6,18 @@
 
 {% block alert %}
     <h4 class="alert-heading">Welcome!</h4>
-    <p class="mb-0">Enter your email below and click Join.</p>
+    <p class="mb-0">Enter your email below and click Join.<br>
+        Always enter your complete school email for it to let you in.</p>
 {% endblock %}
 
 {% block main %}
     <form action="/join" method="post">
         <div class="mb-1">
-            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="email" name="email" placeholder="example.@asdubai.org" type="text">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="email" name="email" placeholder="example.28@asdubai.org" type="text">
         </div>
         <div class="form-text mb-3">
-            Make sure to enter your complete school email <br>
-            It will not let you join without it.
+            Make sure to enter your complete school email<br>
+            It will not let you join without entering it properly.
         </div>
         <button class="btn btn-primary" type="submit">Join</button>
     </form>

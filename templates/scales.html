@@ -6,11 +6,13 @@
 
 {% block alert %}
     <h4 class="alert-heading">Practice your Scales!</h4>
-    <p class="mb-0">After listening to the scale, you can click the start button and press the eight notes in ascending order.<br>
-        After you play eight notes, it'll show you which ones you got right and wrong and your total score.<br>
-        If you feel more experienced, play the scale without listening to the audio or showing the clef!</p>
+    <p class="mb-0">Your goal is to play the scale correctly in ascending order!<br>
+        After you click Start and play eight notes, you can see your right/wrong choices and how many you got correct in total.<br>
+        If you feel more experienced, play the scale without listening to the audio or showing the clef.<br>
+        There are score bonuses for being able to complete it without the audio or the clef. Good Luck!</p>
     <hr>
-    <p class="mb-0">Make sure to enter your full name and click "Save Score" so it can go on the leaderboard.</p>
+    <p class="mb-0">Make sure to click "Save Score" for your score to be displayed in the leaderboard.<br>
+        If your score improves, then only your highest score will be shown in the leaderboard.</p>
 {% endblock %}
 
 {% block main %}
@@ -45,6 +47,8 @@
         <form action="/save_scores" method="post">
             <input name="scale" type="hidden" value="{{ scaleName }}">
             <input name="score" type="hidden" id="score">
+            <input name="showingClef" type="hidden" id="showing-clef">
+            <input name="playedAudio" type="hidden" id="played-audio" value="false">
             <input style="margin-right: 10px" class="btn btn-success" type="submit" value="Save Score">
         </form>
         <form action="/scales" method="post">

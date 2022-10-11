@@ -1,10 +1,23 @@
 // Declare all necessary variables
-let scale = [], noteClicks = [], correct = 0, notes = document.querySelectorAll('.note')
+let scale = [], noteClicks = [], correct = 0.0, notes = document.querySelectorAll('.note')
 
-// Copy scale from app.py into scales.js (through scales.html) and make notes playable
+// Configure the scale so it can track score appropriately
 function setScale(arr) {
-    document.getElementById('start').disabled = true;
     scale = arr;
+
+    // Disable other relevant buttons on page
+    document.getElementById('start').disabled = true;
+    document.getElementById('play-scale').disabled = true;
+    document.getElementById('toggle-clef').disabled = true;
+
+    // Track whether clef is showing while playing (for score bonus)
+    if (document.getElementById('img-clef').style.visibility == 'hidden') {
+        document.getElementById('showing-clef').value = "false";
+    } else {
+        document.getElementById('showing-clef').value = "true";
+    }
+
+    // Enable all notes to make them playable
     for (let i = 0; i < notes.length; i++) {
         notes[i].disabled = false;
     }
@@ -13,19 +26,22 @@ function setScale(arr) {
 // Play major scale when play button is clicked
 document.querySelector('#play-scale').addEventListener('click', function() {
     document.querySelector('#scale-audio').play();
+
+    // Track that audio has been played (for score bonus)
+    document.getElementById('played-audio').value = "true";
 });
 
-// Hide / Show Clef
+// Toggle Clef Visibility
 buttonClef = document.querySelector('#toggle-clef');
 imgClef = document.getElementById('img-clef');
 buttonClef.addEventListener('click', function() {
-  if (imgClef.style.visibility == 'visible') {
-    imgClef.style.visibility = 'hidden';
-    buttonClef.innerHTML = "Show Clef";
-  } else {
-    imgClef.style.visibility = 'visible';
-    buttonClef.innerHTML = "Hide Clef";
-  }
+    if (imgClef.style.visibility == 'visible') {
+        imgClef.style.visibility = 'hidden';
+        buttonClef.innerHTML = "Show Clef";
+    } else {
+        imgClef.style.visibility = 'visible';
+        buttonClef.innerHTML = "Hide Clef";
+    }
 });
 
 // Track (correct) clicks on note buttons and Display final results
@@ -44,7 +60,7 @@ function addClick(obj) {
         // Make buttons clicked green (right) or red (wrong)
         for (let i = 0; i < noteClicks.length; i++) {
             if (scale[i] === noteClicks[i].id) {
-                correct++;
+                correct += 1.0;
                 noteClicks[i].style.backgroundColor = 'green';
             } else {
                 noteClicks[i].style.backgroundColor = 'red';
