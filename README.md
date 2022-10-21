@@ -1,4 +1,5 @@
 # Scales Practice
+
 #### Video Demo:
 #### Description: This program enables novice student musicians to learn the common musical major scales through interactive buttons, and by reading clefs and hearing sample audio of the scales. Students can also save their scores (with score multipliers) to a leaderboard, to encourage friendly competition against their fellow classmates and friends.
 
@@ -55,7 +56,7 @@ This file is responsible for actually ensuring users can play the scales, and ch
 
 The scoring process works by comparing each note that the user presses to the note at the same index in the actual scale. This means that it not only checks for correct notes, but also notes being played at the right position, so a user cannot just play the scale in descending order and still get all 8 notes correct. It relies heavily on the DOM to ensure these processes occur at the right time. After 8 notes are played, the process automatically stops and the user cannot play more notes. The correct notes are displayed in green, while the incorrect ones are displayed in read, and their score out of 8 is shown.
 
-This file also keeps track of if the user has listened to the scale audio or is showing the clef at the time of clicking start. If both the audio has been played and the clef is showing, no multiplier is used. If either the audio has not been played or the clef is hidden, then the score is increased by 25%. If neither has been used, then the score is multiplied by 50%. I originally did not have this feature, but to encourage students to become more experienced and not rely on these features, as well as to increase the range of possible scores on the leaderboard, I included this.
+This file also keeps track of if the user has listened to the scale audio or is showing the clef at the time of clicking start. If both the audio has been played and the clef is showing, no multiplier is used. If either the audio has not been played or the clef is hidden, then the score is increased by 25%. If neither has been used, then the score is multiplied by 50%. I originally didn't have this feature, but to encourage students to become more experienced and not rely on these features, and to increase the range of possible scores on the leaderboard, I included this.
 
 ### styles.css
 This file really only is responsible for highlighting the #1, #2, and #3 ranks on the leaderboard in gold, silver, and bronze, respectively. It does so by referencing the class name of the table row, which is assigned while the leaderboard is being created through Jinja templating. Most, if not all, of the other CSS, relies on the Bootstrap framework. Bootstrap is openly free to use, and has elegant designs for the drop-down menus, navigation bars, tables, alert boxes, and more.
