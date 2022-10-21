@@ -1,6 +1,6 @@
 # Scales Practice
 
-#### Video Demo:
+#### Video Demo: https://youtu.be/mrpI3TR9XHg
 #### Description: This program enables novice student musicians to learn the common musical major scales through interactive buttons, and by reading clefs and hearing sample audio of the scales. Students can also save their scores (with score multipliers) to a leaderboard, to encourage friendly competition against their fellow classmates and friends.
 
 <br>
