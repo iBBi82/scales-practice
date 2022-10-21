@@ -5,7 +5,7 @@
 <br>
 
 ## Inspiration
-When I first read through the specifications of the Final Project, I was immediately struck with the question “How do I make my project meaningful?” Having acquired an extensive toolbox of problem-solving skills and knowledge of various programming languages, I wished to create something that went beyond making it for the “sake of it.” It needed to have some sort of purpose and ability to impact somebody, while also relating it to any interests of mine.
+When I first read through the specifications of the Final Project, I was immediately struck with the question “How do I make my project meaningful?” Having acquired an extensive toolbox of problem-solving skills and knowledge of various programming languages, I wished to create something that went beyond making it for the “sake of it.” It needed to have some sort of purpose and ability to impact somebody, while also relating it to my interests.
 
 Given my passion for instrumental music and my desire to educate others, I found the perfect opportunity to develop a system that would help beginning students in Concert Band improve their musical skills and feel confident in their playing ability. After some research and personal reflection on what I personally struggled with as a beginner, I decided to focus on note identification and practicing scales. This topic applies to students playing any instrument and is vital for them to succeed in playing more full pieces. Since it was made by a student for students, it also had to be accessible and easy to use, which is why I chose to implement it in the form of a Flask web application.
 
